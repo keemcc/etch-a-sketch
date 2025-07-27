@@ -1,4 +1,40 @@
 const gridContainer = document.querySelector(".grid-container");
+let gridSize = 16;
+
+document.querySelector("#grid-lines-check").addEventListener("change", (event) => {
+    if (event.target.checked) {
+        turnGridOn();
+    } else {
+        turnGridOff();
+    }
+})
+
+
+setGrid(gridSize);
+
+
+
+
+
+
+
+
+
+function turnGridOn() {
+    for (const row of gridContainer.children) {
+        for (const square of row.children) {
+            square.style.border = "1px solid black";
+        }
+    }
+}
+
+function turnGridOff() {
+    for (const row of gridContainer.children) {
+        for (const square of row.children) {
+            square.style.border = "none";
+        }
+    }
+}
 
 function createGridSquare() {
     const newSquare = document.createElement("div");
@@ -24,6 +60,3 @@ function setGrid(size) {
         gridContainer.appendChild(createGridRow(size));
     }
 }
-
-setGrid(16);
-
