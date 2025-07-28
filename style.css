@@ -33,13 +33,16 @@ button:active {
     background-color: gray;
 }
 
-.grid-container {
+.grid-wrapper {
     flex: 1;
-    aspect-ratio: 1 / 1;
+}
+
+.grid-container {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     border: 1px solid black;
+    flex: 1;
 }
 
 .grid-row {
@@ -51,8 +54,8 @@ button:active {
 }
 
 .grid-square {
-    flex: 1;
     border: 1px solid black;
+    width: 100%;
 }
 
 .hovered {

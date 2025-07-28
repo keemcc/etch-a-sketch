@@ -1,5 +1,9 @@
 const gridContainer = document.querySelector(".grid-container");
 let gridSize = 16;
+let mousedown = false;
+
+document.querySelector("#grid-length-input").value = gridSize;
+document.querySelector("#grid-width-input").value = gridSize;
 
 document.querySelector("#grid-lines-check").addEventListener("change", (event) => {
     if (event.target.checked) {
@@ -9,16 +13,61 @@ document.querySelector("#grid-lines-check").addEventListener("change", (event) =
     }
 })
 
+document.addEventListener("mousedown", () => {
+    mousedown = true;
+})
 
-setGrid(gridSize);
+document.addEventListener("mouseup", () => {
+    mousedown = false;
+})
+
+document.querySelector("button").addEventListener("click", () => {
+    destroyGrid();
+    let width = parseInt(document.querySelector("#grid-length-input").value);
+    let height = parseInt(document.querySelector("#grid-width-input").value);
+    console.log(`${width} ${height}`);
+    setGrid(width, height);
+})
+
+document.querySelector("#grid-length-input").addEventListener("input", (e) => {
+    const input = parseInt(e.target.value);
+    console.log(`value : ${input}`);
+    if (input && (input > 0)) {
+        destroyGrid();
+        setGrid(input, parseInt(document.querySelector("#grid-width-input").value));
+    }
+})
+
+document.querySelector("#grid-width-input").addEventListener("input", (e) => {
+    const input = parseInt(e.target.value);
+    if (input && (input > 0)) {
+        destroyGrid();
+        setGrid(parseInt(document.querySelector("#grid-length-input").value), input);
+    }
+})
+
+setGrid(gridSize, gridSize);
 
 
+function destroyGrid() {
+    while (gridContainer.firstChild) {
+        gridContainer.firstChild.remove();
+    }
+}
 
+function destoryContainer(container) {
+    for (const child of container.children) {
+        destoryContainer(child);
+    }
+    container.remove();
+}
 
-
-
-
-
+function getInputLength() {
+    lengthInput = parseInt(document.querySelector("#grid-length-input").value);
+    if (lengthInput == NaN) {
+        
+    }
+}
 
 function turnGridOn() {
     for (const row of gridContainer.children) {
@@ -40,8 +89,7 @@ function createGridSquare() {
     const newSquare = document.createElement("div");
     newSquare.classList.add("grid-square");
     newSquare.addEventListener("mouseenter", (e) => {
-        const square = e.target;
-        square.classList.add("hovered");
+        e.target.classList.add("hovered");
     })
     return newSquare;
 }
@@ -55,8 +103,9 @@ function createGridRow(size) {
     return newRow;
 }
 
-function setGrid(size) {
-    for (let i = 0; i < size; i++) {
-        gridContainer.appendChild(createGridRow(size));
+function setGrid(width, height) {
+    gridContainer.style.aspectRatio = `${width} / ${height}`
+    for (let i = 0; i < height; i++) {
+        gridContainer.appendChild(createGridRow(width));
     }
 }
