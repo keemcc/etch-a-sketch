@@ -1,6 +1,7 @@
 const gridContainer = document.querySelector(".grid-container");
 let gridSize = 16;
-let mousedown = false;
+
+setGrid(gridSize, gridSize);
 
 document.querySelector("#grid-length-input").value = gridSize;
 document.querySelector("#grid-width-input").value = gridSize;
@@ -11,14 +12,6 @@ document.querySelector("#grid-lines-check").addEventListener("change", (event) =
     } else {
         turnGridOff();
     }
-})
-
-document.addEventListener("mousedown", () => {
-    mousedown = true;
-})
-
-document.addEventListener("mouseup", () => {
-    mousedown = false;
 })
 
 document.querySelector("button").addEventListener("click", () => {
@@ -46,27 +39,29 @@ document.querySelector("#grid-width-input").addEventListener("input", (e) => {
     }
 })
 
-setGrid(gridSize, gridSize);
-
-
-function destroyGrid() {
-    while (gridContainer.firstChild) {
-        gridContainer.firstChild.remove();
+function setGrid(width, height) {
+    gridContainer.style.aspectRatio = `${width} / ${height}`
+    for (let i = 0; i < height; i++) {
+        gridContainer.appendChild(createGridRow(width));
     }
 }
 
-function destoryContainer(container) {
-    for (const child of container.children) {
-        destoryContainer(child);
+function createGridRow(size) {
+    const newRow = document.createElement("div");
+    newRow.classList.add("grid-row");
+    for (let i = 0; i < (size); i++) {
+        newRow.appendChild(createGridSquare());
     }
-    container.remove();
+    return newRow;
 }
 
-function getInputLength() {
-    lengthInput = parseInt(document.querySelector("#grid-length-input").value);
-    if (lengthInput == NaN) {
-        
-    }
+function createGridSquare() {
+    const newSquare = document.createElement("div");
+    newSquare.classList.add("grid-square");
+    newSquare.addEventListener("mouseenter", (e) => {
+        e.target.classList.add("hovered");
+    })
+    return newSquare;
 }
 
 function turnGridOn() {
@@ -85,27 +80,8 @@ function turnGridOff() {
     }
 }
 
-function createGridSquare() {
-    const newSquare = document.createElement("div");
-    newSquare.classList.add("grid-square");
-    newSquare.addEventListener("mouseenter", (e) => {
-        e.target.classList.add("hovered");
-    })
-    return newSquare;
-}
-
-function createGridRow(size) {
-    const newRow = document.createElement("div");
-    newRow.classList.add("grid-row");
-    for (let i = 0; i < (size); i++) {
-        newRow.appendChild(createGridSquare());
-    }
-    return newRow;
-}
-
-function setGrid(width, height) {
-    gridContainer.style.aspectRatio = `${width} / ${height}`
-    for (let i = 0; i < height; i++) {
-        gridContainer.appendChild(createGridRow(width));
+function destroyGrid() {
+    while (gridContainer.firstChild) {
+        gridContainer.firstChild.remove();
     }
 }
